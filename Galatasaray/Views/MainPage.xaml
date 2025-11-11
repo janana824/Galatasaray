@@ -1,72 +1,317 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Galatasaray.MainPage">
+             x:Class="Galatasaray.MainPage"
+             BackgroundColor="Black">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="16">
-            <Grid ColumnDefinitions="*,*">
-                <Button Text="Iniciar todos" Command="{Binding StartAllCommand}" />
-                <Button Text="Detener todos" Command="{Binding StopAllCommand}" />
+    <Grid>
+        <!-- Layout para orientación vertical (Portrait) -->
+        <Grid x:Name="PortraitLayout" IsVisible="True" RowDefinitions="*,120" Padding="0">
+
+            <!-- Panel principal con medidores -->
+            <ScrollView Grid.Row="0">
+                <Grid Padding="15,20,15,15" RowSpacing="25" ColumnSpacing="15"
+                      RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
+
+                    <!-- Acelerómetro -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8" HorizontalOptions="Center">
+                        <Label Text="⚡" TextColor="#00ff41" FontSize="32" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="Black"
+                               BorderColor="Red"
+                               CornerRadius="100"
+                               Padding="15"
+                               HasShadow="False"
+                               HeightRequest="170"
+                               WidthRequest="170">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                                    <Label Text="ACELERÓMETRO" TextColor="Red" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,3"/>
+                                    <Label Text="{Binding AccelX, StringFormat='X: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding AccelY, StringFormat='Y: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding AccelZ, StringFormat='Z: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="g" TextColor="White" FontSize="10" HorizontalOptions="Center" Margin="0,2,0,0"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsEnabled="{Binding AccelSupported}" 
+                                IsToggled="{Binding AccelOn}"
+                                OnColor="#00ff41"
+                                ThumbColor="White"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+
+                    <!-- Brújula -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🧭" TextColor="#00d4ff" FontSize="32" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a"
+                               BorderColor="#00d4ff"
+                               CornerRadius="100"
+                               Padding="15"
+                               HasShadow="False"
+                               HeightRequest="170"
+                               WidthRequest="170">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                                    <Label Text="BRÚJULA" TextColor="#00d4ff" FontSize="11" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding CompassHeading, StringFormat='{0:F0}°'}" 
+                                           TextColor="#00d4ff" 
+                                           FontSize="50" 
+                                           FontAttributes="Bold"
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"
+                                           Margin="0,5,0,2"/>
+                                    
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsEnabled="{Binding CompassSupported}" 
+                                IsToggled="{Binding CompassOn}"
+                                OnColor="#00d4ff"
+                                ThumbColor="White"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+
+                    <!-- Barómetro -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🌡️" TextColor="#ffd600" FontSize="32" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a"
+                               BorderColor="#ffd600"
+                               CornerRadius="100"
+                               Padding="15"
+                               HasShadow="False"
+                               HeightRequest="170"
+                               WidthRequest="170">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="0">
+                                    <Label Text="PRESIÓN" TextColor="#ffd600" FontSize="11" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding BaroHpa, StringFormat='{0:F1}'}" 
+                                           TextColor="#ffd600" 
+                                           FontSize="46" 
+                                           FontAttributes="Bold"
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"
+                                           Margin="0,5,0,2"/>
+                                    <Label Text="NO" TextColor="White" FontSize="20" HorizontalOptions="Center" Margin="0,-40,0,1"/>
+                                    <Label Text="DISPONIBLE" TextColor="White" FontSize="20" HorizontalOptions="Center" Margin="0,2,0,10"/>
+                                    <Label Text="hPa" TextColor="White" FontSize="11" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsEnabled="{Binding BaroSupported}" 
+                                IsToggled="{Binding BaroOn}"
+                                OnColor="#ffd600"
+                                ThumbColor="White"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+
+                    <!-- Giroscopio -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🔄" TextColor="Green" FontSize="32" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a"
+                               BorderColor="Green"
+                               CornerRadius="100"
+                               Padding="15"
+                               HasShadow="False"
+                               HeightRequest="170"
+                               WidthRequest="170">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                                    <Label Text="GIROSCOPIO" TextColor="Green" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,3"/>
+                                    <Label Text="{Binding GyroX, StringFormat='X: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding GyroY, StringFormat='Y: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding GyroZ, StringFormat='Z: {0:F1}'}" 
+                                           TextColor="#ffffff" 
+                                           FontSize="16" 
+                                           FontFamily="Courier New"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="rad/s" TextColor="White" FontSize="9" HorizontalOptions="Center" Margin="0,2,0,0"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsEnabled="{Binding GyroSupported}" 
+                                IsToggled="{Binding GyroOn}"
+                                OnColor="#ff6b00"
+                                ThumbColor="White"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+
+                </Grid>
+            </ScrollView>
+
+            <!-- Controles inferiores -->
+            <Grid Grid.Row="1" RowDefinitions="*,Auto" Padding="0">
+                <Grid Grid.Row="0" Padding="15,10,15,5" BackgroundColor="#000000" ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" 
+                            Text="▶ INICIAR TODO" 
+                            Command="{Binding StartAllCommand}"
+                            BackgroundColor="#00ff41"
+                            TextColor="#000000"
+                            FontAttributes="Bold"
+                            FontSize="13"
+                            CornerRadius="10"
+                            HeightRequest="50"/>
+                    <Button Grid.Column="1" 
+                            Text="⏹ DETENER TODO" 
+                            Command="{Binding StopAllCommand}"
+                            BackgroundColor="#ff1744"
+                            TextColor="#ffffff"
+                            FontAttributes="Bold"
+                            FontSize="13"
+                            CornerRadius="10"
+                            HeightRequest="50"/>
+                </Grid>
+
+                <!-- Barra de estado -->
+                <Grid Grid.Row="1" 
+                      BackgroundColor="#1a1a1a" 
+                      Padding="15,12"
+                      ColumnDefinitions="Auto,*,Auto" 
+                      ColumnSpacing="10">
+                    <BoxView Grid.Column="0"
+                             WidthRequest="10"
+                             HeightRequest="10"
+                             CornerRadius="5"
+                             Color="#00ff41"
+                             VerticalOptions="Center"/>
+                    <Label Grid.Column="1"
+                           Text="{Binding StatusText}" 
+                           TextColor="#00d4ff" 
+                           FontSize="11" 
+                           VerticalOptions="Center"
+                           LineBreakMode="TailTruncation"/>
+                    <Label Grid.Column="2" 
+                           Text="SENSORES" 
+                           TextColor="#f88888" 
+                           FontSize="10"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"/>
+                </Grid>
             </Grid>
+        </Grid>
 
-            <!-- Acelerómetro -->
-            <Frame>
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Acelerómetro" FontAttributes="Bold"/>
-                    <Label FontSize="28"
-                 Text="{Binding AccelX, StringFormat='X {0:F2} g'}"/>
-                    <Label FontSize="28"
-                 Text="{Binding AccelY, StringFormat='Y {0:F2} g'}"/>
-                    <Label FontSize="28"
-                 Text="{Binding AccelZ, StringFormat='Z {0:F2} g'}"/>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <Label Text="Activo" VerticalOptions="Center"/>
-                        <Switch IsEnabled="{Binding AccelSupported}" IsToggled="{Binding AccelOn}"/>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
+        <!-- Layout para orientación horizontal (Landscape) -->
+        <Grid x:Name="LandscapeLayout" IsVisible="False" RowDefinitions="*,70" Padding="0">
 
-            <!-- Brújula -->
-            <Frame>
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Brújula" FontAttributes="Bold"/>
-                    <Label FontSize="28" Text="{Binding CompassHeading, StringFormat='{0:F0}°'}"/>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <Label Text="Activo" VerticalOptions="Center"/>
-                        <Switch IsEnabled="{Binding CompassSupported}" IsToggled="{Binding CompassOn}"/>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
+            <!-- Panel horizontal con medidores -->
+            <ScrollView Grid.Row="0" Orientation="Horizontal">
+                <HorizontalStackLayout Padding="15,20" Spacing="20">
 
-            <!-- Barómetro -->
-            <Frame>
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Barómetro" FontAttributes="Bold"/>
-                    <Label FontSize="28" Text="{Binding BaroHpa, StringFormat='{0:F1} hPa'}"/>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <Label Text="Activo" VerticalOptions="Center"/>
-                        <Switch IsEnabled="{Binding BaroSupported}" IsToggled="{Binding BaroOn}"/>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
+                    <!-- Acelerómetro -->
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="⚡" TextColor="#00ff41" FontSize="28" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a" BorderColor="#00ff41" CornerRadius="100" 
+                               HasShadow="False" Padding="12" WidthRequest="140" HeightRequest="140">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="3">
+                                    <Label Text="ACEL" TextColor="#00ff41" FontSize="11" FontAttributes="Bold"/>
+                                    <Label Text="{Binding AccelX, StringFormat='X:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="{Binding AccelY, StringFormat='Y:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="{Binding AccelZ, StringFormat='Z:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="g" TextColor="#666666" FontSize="9"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsToggled="{Binding AccelOn}" OnColor="#00ff41" ThumbColor="White" HorizontalOptions="Center" BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
 
-            <!-- Giroscopio -->
-            <Frame>
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Giroscopio" FontAttributes="Bold"/>
-                    <Label FontSize="28" Text="{Binding GyroX, StringFormat='X {0:F2} rad/s'}"/>
-                    <Label FontSize="28" Text="{Binding GyroY, StringFormat='Y {0:F2} rad/s'}"/>
-                    <Label FontSize="28" Text="{Binding GyroZ, StringFormat='Z {0:F2} rad/s'}"/>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                        <Label Text="Activo" VerticalOptions="Center"/>
-                        <Switch IsEnabled="{Binding GyroSupported}" IsToggled="{Binding GyroOn}"/>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
+                    <!-- Brújula -->
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🧭" TextColor="#00d4ff" FontSize="28" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a" BorderColor="#00d4ff" CornerRadius="100" 
+                               HasShadow="False" Padding="12" WidthRequest="140" HeightRequest="140">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="1">
+                                    <Label Text="BRÚJULA" TextColor="#00d4ff" FontSize="10" FontAttributes="Bold"/>
+                                    <Label Text="{Binding CompassHeading, StringFormat='{0:F0}°'}" TextColor="#00d4ff" FontSize="38" FontAttributes="Bold" FontFamily="Courier New"/>
+                                    <Label Text="N" TextColor="#666666" FontSize="9"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsToggled="{Binding CompassOn}" OnColor="#00d4ff" ThumbColor="White" HorizontalOptions="Center" BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
 
-            <Label FontSize="12" Text="{Binding StatusText}"/>
-        </VerticalStackLayout>
-    </ScrollView>
+                    <!-- Barómetro -->
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🌡️" TextColor="#ffd600" FontSize="28" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a" BorderColor="#ffd600" CornerRadius="100" 
+                               HasShadow="False" Padding="12" WidthRequest="140" HeightRequest="140">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="1">
+                                    <Label Text="PRESIÓN" TextColor="#ffd600" FontSize="10" FontAttributes="Bold"/>
+                                    <Label Text="{Binding BaroHpa, StringFormat='{0:F1}'}" TextColor="#ffd600" FontSize="36" FontAttributes="Bold" FontFamily="Courier New"/>
+                                    <Label Text="hPa" TextColor="#666666" FontSize="10"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsToggled="{Binding BaroOn}" OnColor="#ffd600" ThumbColor="White" HorizontalOptions="Center" BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
 
+                    <!-- Giroscopio -->
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Label Text="🔄" TextColor="#ff6b00" FontSize="28" HorizontalOptions="Center"/>
+                        <Frame BackgroundColor="#0a0a0a" BorderColor="#ff6b00" CornerRadius="100" 
+                               HasShadow="False" Padding="12" WidthRequest="140" HeightRequest="140">
+                            <Grid>
+                                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="3">
+                                    <Label Text="GIRO" TextColor="#ff6b00" FontSize="11" FontAttributes="Bold"/>
+                                    <Label Text="{Binding GyroX, StringFormat='X:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="{Binding GyroY, StringFormat='Y:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="{Binding GyroZ, StringFormat='Z:{0:F1}'}" TextColor="#ffffff" FontSize="14" FontFamily="Courier New"/>
+                                    <Label Text="rad/s" TextColor="#666666" FontSize="8"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                        <Switch IsToggled="{Binding GyroOn}" OnColor="#ff6b00" ThumbColor="White" HorizontalOptions="Center" BackgroundColor="Transparent"/>
+                    </VerticalStackLayout>
+
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <!-- Controles y estado en landscape -->
+            <Grid Grid.Row="1" RowDefinitions="*,Auto" Padding="0">
+                <Grid Grid.Row="0" Padding="12,8" BackgroundColor="#000000" ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button Grid.Column="0" Text="▶ INICIAR TODO" Command="{Binding StartAllCommand}" 
+                            BackgroundColor="#00ff41" TextColor="#000" FontSize="12" FontAttributes="Bold" 
+                            CornerRadius="8" HeightRequest="45"/>
+                    <Button Grid.Column="1" Text="⏹ DETENER TODO" Command="{Binding StopAllCommand}" 
+                            BackgroundColor="#ff1744" TextColor="#fff" FontSize="12" FontAttributes="Bold" 
+                            CornerRadius="8" HeightRequest="45"/>
+                </Grid>
+                <Grid Grid.Row="1" BackgroundColor="#1a1a1a" Padding="12,10" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <BoxView Grid.Column="0" WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#00ff41" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Text="{Binding StatusText}" TextColor="#00d4ff" FontSize="10" VerticalOptions="Center"/>
+                    <Label Grid.Column="2" Text="SENSORES" TextColor="#888" FontSize="9" FontAttributes="Bold" VerticalOptions="Center"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+    </Grid>
 </ContentPage>
